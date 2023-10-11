@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PokemonModel;
+use App\Models\Pokemon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PokemonController extends Controller
 {
@@ -12,7 +13,11 @@ class PokemonController extends Controller
      */
     public function index()
     {
-        //
+        $pokemons = Pokemon::all();
+
+
+        return view('pokemons.index', compact('pokemons'));
+
     }
 
     /**
@@ -20,7 +25,7 @@ class PokemonController extends Controller
      */
     public function create()
     {
-        //
+        return view('pokemons.create');
     }
 
     /**
@@ -28,13 +33,30 @@ class PokemonController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $request->validate([
+            'name' => 'required|string',
+            'weight' => 'required|numeric|min:5|max:1000',
+            'height' => 'required|numeric|min:5|max:100',
+        ]);
+
+        $pokemon = new Pokemon([
+            'name' => $request->input('name'),
+            'weight' => $request->input('weight'),
+            'height' => $request->input('height'),
+            'shiny' => $request->has('shiny'),
+        ]);
+
+        // Save the Pokémon to the database
+        $pokemon->save();
+
+        return redirect()->route('pokemons.index')->with('success', 'Pokémon created successfully');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(PokemonModel $pokemonModel)
+    public function show(Pokemon $pokemonModel)
     {
         //
     }
@@ -42,7 +64,7 @@ class PokemonController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(PokemonModel $pokemonModel)
+    public function edit(Pokemon $pokemonModel)
     {
         //
     }
@@ -50,7 +72,7 @@ class PokemonController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, PokemonModel $pokemonModel)
+    public function update(Request $request, Pokemon $pokemonModel)
     {
         //
     }
@@ -58,7 +80,7 @@ class PokemonController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(PokemonModel $pokemonModel)
+    public function destroy(Pokemon $pokemonModel)
     {
         //
     }
