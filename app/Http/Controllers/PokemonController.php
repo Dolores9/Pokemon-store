@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Interest;
 use App\Models\Pokemon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +18,7 @@ class PokemonController extends Controller
 
 
         return view('pokemons.index', compact('pokemons'));
+
 
     }
 
@@ -50,7 +52,9 @@ class PokemonController extends Controller
         // Save the Pokémon to the database
         $pokemon->save();
 
-        return redirect()->route('pokemons.index')->with('success', 'Pokémon created successfully');
+
+        return redirect()->route('pokemons.store')->with('success', 'Pokémon created successfully');
+
     }
 
     /**
@@ -64,24 +68,45 @@ class PokemonController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Pokemon $pokemonModel)
+    public function edit($id)
     {
-        //
+        $pokemon = Pokemon::find($id);
+
+        return view('pokemons.edit')->with('pokemon', $pokemon);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Pokemon $pokemonModel)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|string',
+            'weight' => 'numeric|min:5|max:1000',
+            'height' => 'numeric|min:5|max:1000',
+//
+        ]);
+
+        $pokemon = Pokemon::find($id);
+        $pokemon->name = $request->input('name');
+        $pokemon->weight = $request->input('weight');
+        $pokemon->height = $request->input('height');
+
+        $pokemon->save();
+
+        return redirect()->route('pokemon.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Pokemon $pokemonModel)
+    public function delete(Pokemon $id)
     {
-        //
+        $pokemon =Pokemon::where('id',$id)->first();
+
+        if ($pokemon != null) {
+            $pokemon->delete();
+            return redirect()->route('pokemons.index')->with(['message'=> 'Successfully deleted!!']);
+        }
     }
 }
