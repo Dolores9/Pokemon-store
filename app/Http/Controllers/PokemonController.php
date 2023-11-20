@@ -53,7 +53,7 @@ class PokemonController extends Controller
         $pokemon->save();
 
 
-        return redirect()->route('pokemons.store')->with('success', 'Pokémon created successfully');
+        return redirect()->route('pokemons.index')->with('success', 'Pokémon created successfully');
 
     }
 
@@ -73,13 +73,15 @@ class PokemonController extends Controller
         $pokemon = Pokemon::find($id);
 
         return view('pokemons.edit')->with('pokemon', $pokemon);
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id,)
     {
+
         $request->validate([
             'name' => 'required|string',
             'weight' => 'numeric|min:5|max:1000',
@@ -100,7 +102,7 @@ class PokemonController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function delete(Pokemon $id)
+    public function destroy(Pokemon $id)
     {
         $pokemon =Pokemon::where('id',$id)->first();
 
@@ -109,4 +111,43 @@ class PokemonController extends Controller
             return redirect()->route('pokemons.index')->with(['message'=> 'Successfully deleted!!']);
         }
     }
+
+    public function search(Request $request){
+
+        $search_text =$request->query('search');
+        $pokemons = Pokemon::where('name','like','%'. $search_text. '%')->get();
+
+
+
+
+        return view('pokemons.index', compact('pokemons'));
+    }
+
+
+    public function filter(Request $request){
+
+        $filter_text =$request->query('filter');
+        $pokemons = Pokemon::where('shiny','like','%'. $filter_text. '%')->get();
+
+
+
+        return view('pokemons.index', compact('pokemons'));
+
+
+    }
+
+    public function togglePokemonVisibility($id)
+    {
+        // Get the Pokémon by its ID from your database (if needed)
+        $pokemon = Pokemon::find($id);
+
+        // Toggle the visibility using a session variable
+        $visibilityKey = "pokemon_visibility_{$id}";
+        $visibility = session($visibilityKey, true);
+        session([$visibilityKey => !$visibility]);
+
+        return redirect()->route('admin.index'); // Redirect back to the admin page
+    }
 }
+
+

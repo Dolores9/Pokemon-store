@@ -9,7 +9,7 @@
 
 <h1> Edit: {{$pokemon['name']}} </h1>
 
- <form action="" method="post">
+ <form action="{{ route('pokemons.update', ['pokemon' => $pokemon->id]) }}" method="post">
     @method('PUT')
     @csrf
     <input name="title" type="text" value="{{ $pokemon->name}}">
@@ -27,13 +27,17 @@
 
 </form>
 
-<a href="{{route('delete', ['id' => $pokemon['id']])}}" >delete</a>
+<form action="{{ route('pokemons.destroy', ['pokemon' => $pokemon->id]) }}" method="post">
+    @method('DELETE')
+    @csrf
+    <button type="submit">Delete</button>
+</form>
+
 
 </body>
 </html>
 
 
-{{--{{ route('update', ['pokemon' => $pokemon->id]) }}--}}
 
 
 

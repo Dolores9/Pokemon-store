@@ -8,6 +8,10 @@
 
 <h2>Create a New Pokémon</h2>
 
+@if(Auth::user()->admin)
+    ADMIN
+@endif
+
 <form method="POST" action="{{ route('pokemons.store') }}">
     @csrf
 

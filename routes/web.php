@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PokemonController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,11 +15,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('pokemons.index');
-});
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])    ->middleware('auth');
+
 
 
 Route::resource('pokemons', PokemonController::class);
+
+Route::get('admin',[AdminController::class, 'index'])->name('admin')->middleware('admin');
+//Route::get('admin', [AdminController::class, 'destroy'])->name('admin')->middleware('admin');
+
+Auth::routes();
+
 
 
