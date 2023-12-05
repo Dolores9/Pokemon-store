@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Interest;
 use App\Models\Pokemon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -96,7 +95,7 @@ class PokemonController extends Controller
 
         $pokemon->save();
 
-        return redirect()->route('pokemon.index');
+        return redirect()->route('pokemon.admin');
     }
 
     /**
@@ -138,16 +137,31 @@ class PokemonController extends Controller
 
     public function togglePokemonVisibility($id)
     {
-        // Get the Pokémon by its ID from your database (if needed)
-        $pokemon = Pokemon::find($id);
+        {
+            $pokemon = Pokemon::find($id);
 
-        // Toggle the visibility using a session variable
-        $visibilityKey = "pokemon_visibility_{$id}";
-        $visibility = session($visibilityKey, true);
-        session([$visibilityKey => !$visibility]);
+            if ($pokemon) {
+                $pokemon->active = !$pokemon->active;
+                $pokemon->save();
+            }
 
-        return redirect()->route('admin.index'); // Redirect back to the admin page
+            return redirect()->route('pokemons.admin')->with('success', 'Pokémon status gewijzigd!');
+        }
     }
+    public function buyPokemon()
+    {
+        $user = Auth::user();
+
+
+        if ($user->login_count >= 5) {
+            return redirect()->route('pokemons.buy')->with('success', 'Je kan een Pokémon kopen nu!');
+        }
+
+        return redirect()->route('pokemons.index')->with('error', 'Je moet minstens 5 keer zijn ingelogd om een Pokémon te kunnen kopen.');
+    }
+
 }
+
+
 
 

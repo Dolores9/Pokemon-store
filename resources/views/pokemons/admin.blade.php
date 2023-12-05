@@ -16,6 +16,12 @@
                     @method('DELETE')
                     <button type="submit">Delete</button>
                 </form>
+                <p>Status: {{ $pokemon->active ? 'Actief' : 'Niet Actief' }}</p>
+
+                <form action="{{ route('pokemons.toggle-status', $pokemon->id) }}" method="post">
+                    @csrf
+                    <button type="submit">{{ $pokemon->active ? 'Deactiveren' : 'Activeren' }}</button>
+                </form>
             </li>
         @endforeach
     </ul>

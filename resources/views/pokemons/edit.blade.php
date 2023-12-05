@@ -14,11 +14,11 @@
     @csrf
     <input name="title" type="text" value="{{ $pokemon->name}}">
     <br>
-    <input type="number" class="form"   name="weight" value="{{ $pokemon->weigth }}">
+    <input type="number" class="form"   name="weight" value="{{ $pokemon->weight }}">
     <input type="number" class="form"   name="height" value="{{ $pokemon->height }}">
     <select name="interest" class="form" id="control-714036">
-        <option value="Force-users" {{($pokemon->pokemon == "Yes")?"selected":"" }}>Yes</option>
-        <option value="History" {{($pokemon->pokemon == "No")?"selected":"" }}>No</option>
+        <option value="Yes" {{($pokemon->pokemon == "Yes")?"selected":"" }}>Yes</option>
+        <option value="No" {{($pokemon->pokemon == "No")?"selected":"" }}>No</option>
     </select>
     <br>
     <button type="submit" class="submit btn-default btn">upload

@@ -43,4 +43,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    protected $dates = ['last_login_at'];
+
+    public function incrementLoginCount()
+    {
+        $this->login_count++;
+        $this->save();
+    }
+
+    public function getLastLoginDateAttribute()
+    {
+        return $this->attributes['last_login_at'] ? Carbon::parse($this->attributes['last_login_at']) : null;
+    }
 }

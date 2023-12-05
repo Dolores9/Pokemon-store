@@ -33,7 +33,7 @@ can't find your pokemon?
 </ul>
 
 
-<li><a href="{{route('pokemons.create')}}">Buy pokemon?</a> </li>
+<li><a href="{{ route('pokemons.store') }}" class="btn btn-primary">Koop Pokémon</a> </li>
 
 
 

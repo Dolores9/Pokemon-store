@@ -23,8 +23,12 @@ Route::resource('pokemons', PokemonController::class);
 
 Route::get('admin',[AdminController::class, 'index'])->name('admin')->middleware('admin');
 //Route::get('admin', [AdminController::class, 'destroy'])->name('admin')->middleware('admin');
+Route::post('/pokemons/{id}/toggle-status', 'PokemonController@togglePokemonStatus')->name('pokemons.toggle-status');
 
 Auth::routes();
+
+
+
 
 
 
